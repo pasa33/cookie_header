@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	GLOBAL = "!#GLOBAL#!"
+	global = "!#GLOBAL#!"
 )
 
 type cookieHeader struct {
@@ -66,7 +66,7 @@ func (ch *cookieHeader) CreateHeader(domains ...string) string {
 	}
 
 	for domain, cks := range ch.jar {
-		if len(domains) == 0 || domain == GLOBAL || slices.Contains(domains, domain) {
+		if len(domains) == 0 || domain == global || slices.Contains(domains, domain) {
 			for _, cookie := range cks {
 				arr = append(arr, cookie.toString())
 			}
@@ -86,7 +86,7 @@ func (ch *cookieHeader) GetAllCookies(domains ...string) []cookie {
 	allCks := []cookie{}
 
 	for domain, cks := range ch.jar {
-		if len(domains) == 0 || domain == GLOBAL || slices.Contains(domains, domain) {
+		if len(domains) == 0 || domain == global || slices.Contains(domains, domain) {
 			for _, cookie := range cks {
 				allCks = append(allCks, cookie)
 			}
@@ -126,7 +126,7 @@ func (ch *cookieHeader) DeleteCookie(name string, domains ...string) {
 	}
 
 	for domain := range ch.jar {
-		if len(domains) == 0 || domain == GLOBAL || slices.Contains(domains, domain) {
+		if len(domains) == 0 || domain == global || slices.Contains(domains, domain) {
 			ch.deletecookie(name, domain)
 		}
 	}
@@ -137,7 +137,7 @@ func (ch *cookieHeader) addcookie(name, value, domain string) {
 	ogDomain := domain
 	domain = fixHost(domain)
 	if domain == "" {
-		domain = GLOBAL
+		domain = global
 	}
 	cks, ok := ch.jar[domain]
 	if !ok {
