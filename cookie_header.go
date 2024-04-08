@@ -19,9 +19,9 @@ type cookieHeader struct {
 }
 
 type cookie struct {
-	name   string
-	value  string
-	domain string
+	Name   string
+	Value  string
+	Domain string
 }
 
 // create new cookieHeader
@@ -104,7 +104,7 @@ func (ch *cookieHeader) GetCookieValue(name, domain string) string {
 
 	if cks, ok := ch.jar[domain]; ok {
 		if cookie, ok := cks[name]; ok {
-			return cookie.value
+			return cookie.Value
 		}
 	}
 	return ""
@@ -145,9 +145,9 @@ func (ch *cookieHeader) addcookie(name, value, domain string) {
 		ch.jar[domain] = cks
 	}
 	cks[name] = cookie{
-		name:   name,
-		value:  value,
-		domain: ogDomain,
+		Name:   name,
+		Value:  value,
+		Domain: ogDomain,
 	}
 }
 
@@ -161,7 +161,7 @@ func (ch *cookieHeader) deletecookie(name, domain string) {
 
 // private func: cookie to string format
 func (cookie *cookie) toString() string {
-	return fmt.Sprintf("%s=%s", cookie.name, cookie.value)
+	return fmt.Sprintf("%s=%s", cookie.Name, cookie.Value)
 }
 
 // print all cookies for debug stuff
