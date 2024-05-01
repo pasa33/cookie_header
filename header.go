@@ -25,11 +25,11 @@ type cookie struct {
 }
 
 // create new cookieHeader
-func New() cookieHeader {
+func New() *cookieHeader {
 	newJar := cookieHeader{}
 	newJar.jar = make(map[string]map[string]cookie)
 	newJar.wg = &sync.RWMutex{}
-	return newJar
+	return &newJar
 }
 
 func (ch *cookieHeader) LoadFromResponse(res *http.Response, overrideDomain ...string) {
