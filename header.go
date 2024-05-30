@@ -52,7 +52,7 @@ func (ch *cookieHeader) Load(res *http.Response, overrideDomain ...string) {
 			c.Domain = overrideDomain[0]
 		}
 
-		ch.addcookie(c.Name, c.Value, c.Domain)
+		ch.addcookie(c.Name, c.Value, c.Domain, c.Path)
 	}
 }
 
@@ -71,7 +71,7 @@ func (ch *cookieHeader) LoadOverrideEmpty(res *http.Response, overrideDomain str
 			continue
 		}
 
-		ch.addcookie(c.Name, c.Value, c.Domain)
+		ch.addcookie(c.Name, c.Value, c.Domain, c.Path)
 	}
 }
 
@@ -88,7 +88,7 @@ func (ch *cookieHeader) LoadOverrideAll(res *http.Response, overrideDomain strin
 
 		c.Domain = overrideDomain
 
-		ch.addcookie(c.Name, c.Value, c.Domain)
+		ch.addcookie(c.Name, c.Value, c.Domain, c.Path)
 	}
 }
 
@@ -147,11 +147,11 @@ func (ch *cookieHeader) GetCookieValue(name, domain string) string {
 	return ""
 }
 
-func (ch *cookieHeader) AddCookie(name, value, domain string) {
+func (ch *cookieHeader) AddCookie(name, value, domain, path string) {
 	ch.wg.Lock()
 	defer ch.wg.Unlock()
 
-	ch.addcookie(name, value, domain)
+	ch.addcookie(name, value, domain, path)
 }
 
 func (ch *cookieHeader) DeleteCookie(name string, domains ...string) {
@@ -170,7 +170,7 @@ func (ch *cookieHeader) DeleteCookie(name string, domains ...string) {
 }
 
 // private func: add single cookie
-func (ch *cookieHeader) addcookie(name, value, domain string) {
+func (ch *cookieHeader) addcookie(name, value, domain, path string) {
 	ogDomain := domain
 	domain = fixHost(domain)
 	if domain == "" {

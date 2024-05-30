@@ -11,7 +11,7 @@ type CookieHeader interface {
 	CreateHeader(domains ...string) string
 	GetAllCookies(domains ...string) []cookie
 	GetCookieValue(name, domain string) string
-	AddCookie(name, value, domain string)
+	AddCookie(name, value, domain, path string)
 	DeleteCookie(name string, domains ...string)
 }
 
