@@ -185,6 +185,7 @@ func (ch *cookieHeader) addcookie(name, value, domain, path string) {
 		Name:   name,
 		Value:  value,
 		Domain: ogDomain,
+		Path:   path,
 	}
 }
 
