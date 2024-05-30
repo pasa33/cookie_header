@@ -22,6 +22,7 @@ type cookie struct {
 	Name   string
 	Value  string
 	Domain string
+	Path   string
 }
 
 // create new cookieHeader
@@ -32,7 +33,7 @@ func New() *cookieHeader {
 	return &newJar
 }
 
-func (ch *cookieHeader) LoadFromResponse(res *http.Response, overrideDomain ...string) {
+func (ch *cookieHeader) Load(res *http.Response, overrideDomain ...string) {
 	ch.wg.Lock()
 	defer ch.wg.Unlock()
 
@@ -50,6 +51,42 @@ func (ch *cookieHeader) LoadFromResponse(res *http.Response, overrideDomain ...s
 		if len(overrideDomain) > 0 {
 			c.Domain = overrideDomain[0]
 		}
+
+		ch.addcookie(c.Name, c.Value, c.Domain)
+	}
+}
+
+func (ch *cookieHeader) LoadOverrideEmpty(res *http.Response, overrideDomain string) {
+	ch.wg.Lock()
+	defer ch.wg.Unlock()
+
+	for _, c := range res.Cookies() {
+
+		if c.Domain == "" {
+			c.Domain = overrideDomain
+		}
+
+		if c.MaxAge < 0 {
+			ch.deletecookie(c.Name, c.Domain)
+			continue
+		}
+
+		ch.addcookie(c.Name, c.Value, c.Domain)
+	}
+}
+
+func (ch *cookieHeader) LoadOverrideAll(res *http.Response, overrideDomain string) {
+	ch.wg.Lock()
+	defer ch.wg.Unlock()
+
+	for _, c := range res.Cookies() {
+
+		if c.MaxAge < 0 {
+			ch.deletecookie(c.Name, c.Domain)
+			continue
+		}
+
+		c.Domain = overrideDomain
 
 		ch.addcookie(c.Name, c.Value, c.Domain)
 	}

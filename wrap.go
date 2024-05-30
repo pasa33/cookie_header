@@ -5,7 +5,9 @@ import (
 )
 
 type CookieHeader interface {
-	LoadFromResponse(res *http.Response, overrideDomain ...string)
+	Load(res *http.Response, overrideDomain ...string)
+	LoadOverrideEmpty(res *http.Response, overrideDomain string)
+	LoadOverrideAll(res *http.Response, overrideDomain string)
 	CreateHeader(domains ...string) string
 	GetAllCookies(domains ...string) []cookie
 	GetCookieValue(name, domain string) string
